@@ -1,0 +1,37 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital@1&display=swap');
+    
+
+#buttonFF{
+    position: relative;
+    top: -49px; left: 49px;
+    width: 10%;
+    bottom: 20px;
+    margin-top: 10px;
+    border: 3px transparent;
+} 
+
+.ratings i {
+    color: green
+}
+
+.install span {
+    font-size: 12px
+}
+
+.col-md-4 {
+    margin-top: 15px
+}
+
+.card{
+    background-color: black;
+    margin-bottom: 30px;
+}
+
+.initbutton{
+    size: 10px;
+}
+
+body {
+    background-image: url('../img/bg.jpeg');
+  /* background-image: linear-gradient(to right, rgb(228, 228, 228),rgba(95, 247, 214, 0.514), rgb(228, 228, 228) );*/
+}
