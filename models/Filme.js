@@ -31,9 +31,14 @@ const Filme = con.sequelize.define('filmeseries', {
         type: con.Sequelize.INTEGER,
         allowNull: false 
     },
-    plataforma:{
-        type: con.Sequelize.STRING,
-        allowNull: false
+    netflix:{
+        type: con.Sequelize.BOOLEAN,
+    },
+    prime:{
+        type: con.Sequelize.BOOLEAN,
+    },
+    globo:{
+        type: con.Sequelize.BOOLEAN,
     },
     img:{
         type: con.Sequelize.STRING
@@ -44,7 +49,7 @@ const Filme = con.sequelize.define('filmeseries', {
 
 })
 module.exports = Filme;
-//Filme.sync({force:true})
+//  Filme.sync({force:true})
 /*
 idplatform: {
         type: con.Sequelize.INTEGER,

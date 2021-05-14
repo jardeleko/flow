@@ -30,8 +30,40 @@
 .initbutton{
     size: 10px;
 }
+.container{
+    border-radius: 20px;
+    align-items: center;
+}
 
-body {
-    background-image: url('../img/bg.jpeg');
-  /* background-image: linear-gradient(to right, rgb(228, 228, 228),rgba(95, 247, 214, 0.514), rgb(228, 228, 228) );*/
+img{
+    border-radius: 5px;
+}
+
+.alert {
+    margin-left: 85px;
+    width:87%;    
+ }
+ body{
+     background-image: url('../img/bg.jpeg');
+ }
+
+ 
+@media screen and (max-width: 1200px) {
+    .rcol {
+        width: 100%
+    }
+
+    .scol {
+        width: 100%
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .container {
+        width: 95%
+    }
+
+    .row.r2:after {
+        width: 95%
+    }
 }

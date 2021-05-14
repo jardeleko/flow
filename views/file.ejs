@@ -1,0 +1,75 @@
+
+
+<%- include('header') %> 
+
+<style>
+    
+  .btn{
+      color:cornsilk;
+  }
+    
+</style>
+
+<div class="container pt-3 bg-dark text-white">
+    <div class="row main">
+    <% for(const fands of filmeseries) {%> 
+        <div class="col-lg-6 col-12 my-5 rcol">
+            <h3 class="product text-center"><%=fands.nome%> </h3>
+            <div class="image text-center">
+                <img class="img-fluid" src=<%=`/uploads/${fands.img}`%> width="300px"  height="350px">
+            </div>
+            <p class="text-center my-3">O lançamento deste titúlo foi na data de <%=fands.data%> <br>
+        </div>
+        <div class="col-lg-6 col-12 my-5 scol">
+         <br><br>
+            <div class="row r3">
+                <h4 class="h4" >Categoria: <%=fands.categoria%></h4>
+            </div>
+            <div class="row r4">
+                <h5 class="payment-method">Nota de avalição:                       
+                    <span class="ratings">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <%= fands.nota %>
+                </span></h5>
+            </div>
+            <div class="row r5">
+                <h5 class='h5' >Quantidade de comentários: 172</h5   >
+            </div>
+            
+            <form action=<%=`/commits/${fands.id}`%> method="POST">
+                <div class="row r4">
+                    <h4 class="h4">De a sua avaliação: </h4>
+                </div>
+
+                <div class="container">
+                    <span id="rateMe4"  class="feedback"></span>
+                  </div>
+                  
+                  <!-- rating.js file -->
+                <br><br>
+
+                <div class="col-lg-6">
+                    <br><br>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Deixe seu comentário aqui..."> 
+                            
+                        <div class="col-lg-6">
+                            <button class="btn glyphicon glyphicon-send"> 
+                                Enviar 
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            </div>
+        </div>
+    </div>
+    <% } %>
+</div>
+
+<p> lançar comentarios</p>

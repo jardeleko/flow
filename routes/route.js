@@ -39,25 +39,39 @@ router.post('/addfilm', uploads.single('send_img'), (req, res) => {
 	let erros = []
 	let tmpTipo
 
+
 	if(!req.body.filme || req.body.filme == null || req.body.filme === undefined)
 		tmpTipo = req.body.serie
 	else 
 		tmpTipo = req.body.filme
 
+	if(!req.body.amazon)
+		var aprime = 0;
+	else 
+		aprime = 1;
+	if(!req.body.globo)
+		var gplay = 0;
+	else 
+		gplay = 1;
+
+	if(!req.body.netflix)
+		var netflix = 0;
+	else 
+		netflix = 1;
+
+	
 	if(!req.body.titulo || req.body.titulo == undefined || req.body.titulo == null)
 		erros.push({message:"O título está vazio"})
 	if(!req.body.since || req.body.since == undefined || req.body.since == null)
 		erros.push({message:"O campo data precisa ser preenchido"})
 	if(!req.body.categ || req.body.categ == undefined || req.body.categ == null)
 		erros.push({message:"Preencha o campo de categorias e tente novamente"})
-	if(!req.body.plataforma || req.body.plataforma == undefined || req.body.plataforma == null)
-		erros.push({message:"Necessario informar uma plataforma"})
 	if(!req.file || req.file == undefined || req.file == null)
 		erros.push({message:"Quase lá, faltou anexar uma imagem"})
 	
 	if(erros.length > 0){
-		req.flash("error_msg", "Preencha com atenção todos os campos do formulário");
-		res.redirect('/');		
+		req.flash("error_msg", "Preencha todos os campos com atenção")
+		res.redirect('/')
 	}
 
 	else {
@@ -68,22 +82,77 @@ router.post('/addfilm', uploads.single('send_img'), (req, res) => {
 			categoria: req.body.categ,
 			nota: req.body.nota,
 			faixaetaria: req.body.faixaet,
-			plataforma: req.body.plataforma,
+			netflix: netflix,
+			prime: aprime,
+			globo: gplay,
+			comentario: 0,
 			img: req.file.filename
 		}).then(() => {
-			req.flash("success_msg", "Documento enviado com sucesso!");
-			res.redirect('/');
+			req.flash("success_msg", "Documento enviado com sucesso!")
+			res.redirect('/')
 		}).catch((err) => {
-			req.flash("error_msg", "Erro ao enviar os dados!");
-			res.redirect('/');		
+			req.flash("error_msg", "Erro ao enviar os dados!")
+			res.redirect('/')
 		})	
 	}
 })
 
+router.get('/netflix', (req, res) =>{
+	Filme.findAll({where:{'netflix':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/primevideos', (req, res) =>{
+	Filme.findAll({where:{'prime':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/gplay', (req, res) =>{
+	Filme.findAll({where:{'globo':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/filmes', (req, res) =>{
+	Filme.findAll({where:{'tipo':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/series', (req, res) =>{
+	Filme.findAll({where:{'tipo':2}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/filefilter/:id', (req, res) => {
+	var idteste = req.params.id;
+	Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {
+		var json = JSON.stringify(filmeseries);
+		alert(json);
+		if(filmeseries.comentario){
+			console.log("existe comentarios nesse filme")
+		}	
+		else {
+			console.log("pelo menos não deu warni")
+		}
+		res.render('file', {filmeseries: filmeseries})	
+	}).catch((err) => {
+		req.flash("error_msg", "Algo deu errado! escolha outra opção :(");
+		res.redirect('showdata')
+	})
+})
+
+router.post('/commits/:id', (req, res) => {
+	var idfilm = req.params.id;
+	res.render('index');
+})
+
 router.get('/showdata', (req, res) => {
-	Filme.findAll().then((filmeseries) => {
-		console.log(filmeseries);
-		res.render('showdata', {filmeseries: filmeseries});
+	Filme.findAll({order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
 	})
 
 })

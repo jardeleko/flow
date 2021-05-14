@@ -1,33 +1,55 @@
 
-<%-include('header')%> 
-<!--%- JSON.stringify(filmeseries) %-->
-   
+<%-include('header')%>
+
 <br><br>
   
-    <div class="container-fluid">
+<section class="container mt-5 container-fluid">
     <form action="/list" method="GET">
       
-        <div class="container mt-5">
+        <div class="'container mt-5'">
         <div class="row">
             <% for(const fands of filmeseries) {%> 
             <div class="col-md-4">
                 <div class="card p-3">       
                   
-                    <div class="d-flex flex-row mb-3"><img src=<%=`/uploads/${fands.img}`%> width="70">
-                        <div class="d-flex flex-column ml-2"><span><%= fands.nome %></span>
-                                                             <span class="text-black-50"><%= fands.categoria %> </span>
-                                                             <span class="ratings">
-                                                                <i class="fa fa-star">☆</i>
-                                                                <i class="fa fa-star">☆</i>
-                                                                <i class="fa fa-star">☆</i>
-                                                                <i class="fa fa-star">☆</i>
-                                                                <i class="fa fa-star">☆</i>
-                                                                <%= fands.nota %>
-                                                            </span>
-                                                        </div>
+                    <div class="d-flex flex-row mb-3">
+                        <img src=<%=`/uploads/${fands.img}`%> width="70">
+                        <div class="d-flex flex-column ml-2">
+                            <span><%= fands.nome %></span>
+                            <span class="text-black-50"><%= fands.categoria %> </span>
+                                <span class="ratings">
+
+                                <%if(fands.nota == 1) { %>
+                                    <i class="fa fa-star"></i>
+                                <% } %>
+                                <%if(fands.nota == 2) { %>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                <% } %>
+                                <%if(fands.nota == 3) { %>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                <% } %> 
+                                <%if(fands.nota == 4) { %>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                <% } %> 
+                                <%if(fands.nota == 5) { %>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                    <i class="fa fa-star"></i>
+                                <% } %> 
+                                <%= fands.nota %>
+                            </span>
+                        </div>
                     </div>
-                    <h6>Comentários</h6>
-                    <div class="d-flex justify-content-between install mt-3"><span>172 visualizações</span><span class="text-primary" ><a href="#">Views </a><i class="fa fa-angle-right"></i></span></div>
+                    <h6>Comentários </h6>
+                    <div class="d-flex justify-content-between install mt-3"><span><%=fands.comentario%></span><span class="text-primary" ><a href=<%=`/filefilter/${fands.id}`%>> Views </a><i class="fa fa-angle-right"></i></span></div>
                 </div>
             </div>
             <% } %>
@@ -37,5 +59,12 @@
      </div>
     </form>
     <br><br><br>
-    </div>  
+    </section>  
+
+    <!--nav aria-label="...">
+        <ul class="pager">
+          <li><a href="#">Previous</a></li>
+          <li><a href="#">Next</a></li>
+        </ul>
+      </nav-->
 <%- include('footer') %> 
