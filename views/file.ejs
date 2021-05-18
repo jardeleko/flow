@@ -3,14 +3,20 @@
 <%- include('header') %> 
 
 <style>
-    
+  .form-select{
+    color:black;
+  }  
+
+  .cssrat{
+      color:darkgoldenrod;
+  }
   .btn{
       color:cornsilk;
   }
     
 </style>
 
-<div class="container pt-3 bg-dark text-white">
+<div class="container pt-3 bg-dark text-white" style="border-radius: 0;">
     <div class="row main">
     <% for(const fands of filmeseries) {%> 
         <div class="col-lg-6 col-12 my-5 rcol">
@@ -39,26 +45,25 @@
             <div class="row r5">
                 <h5 class='h5' >Quantidade de comentários: 172</h5   >
             </div>
-            
+            <br><br><br>
             <form action=<%=`/commits/${fands.id}`%> method="POST">
-                <div class="row r4">
-                    <h4 class="h4">De a sua avaliação: </h4>
+                <div class="row  r4">
+                    <h4 class="h4"> Sua avaliação: </h4>
+                    <select class="form-select" style="margin-left:4px ; text-align: center; border-radius: 20px;" name="starnota" > size="3" aria-label="size 3 select example">
+                        <option selected>Dê sua nota</option>
+                        <option value="1" class="cssrat">✭</option>
+                        <option value="2" class="cssrat">✭✭</option>
+                        <option value="3" class="cssrat">✭✭✭</option>
+                        <option value="2" class="cssrat">✭✭✭✭</option>
+                        <option value="3" class="cssrat">✭✭✭✭✭</option>
+                      </select>
                 </div>
-
-                <div class="container">
-                    <span id="rateMe4"  class="feedback"></span>
-                  </div>
-                  
-                  <!-- rating.js file -->
-                <br><br>
-
-                <div class="col-lg-6">
+                <div class=" col-md-8 mb-3">
                     <br><br>
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Deixe seu comentário aqui..."> 
-                            
-                        <div class="col-lg-6">
-                            <button class="btn glyphicon glyphicon-send"> 
+                    <div class="input-group ">
+                        <input type="text" class="form-control" name="starcommit" placeholder="Deixe seu comentário aqui..."> 
+                        <div class="col-md-6 col-12">
+                            <button class="btn glyphicon glyphicon-send "> 
                                 Enviar 
                             </button>
                         </div>
@@ -71,5 +76,21 @@
     </div>
     <% } %>
 </div>
+<div class="container pt-3 bg-light text-white" style="border-radius: 0;">
+    <div class="card text" style="color: black;">
+        <div class="card-header">
+        Comentários
+        </div>
+            <% for(const avl of avaliacao) {%> 
+            <div class="card-body">
+                <h5 class="card-title"><strong>Username</strong> </h5>
+                <p class="card-text"><%=avl.comentario%></p>
+            </div>
+            <div class="card-footer text-muted"> enviado em <%=avl.createdAt%>
+            </div>
+            <span class="btn" style="color: black;" ><a href="#">apagar</a></span>
+            <% } %>
 
-<p> lançar comentarios</p>
+    </div>
+
+</div>

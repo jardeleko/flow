@@ -16,6 +16,12 @@ const Avaliacao = con.sequelize.define('avaliacao', {
     },
     comentario:{
         type: con.Sequelize.STRING
+    },
+    idFilm: {
+        type: con.Sequelize.INTEGER
+    },
+    createdAt:{
+        type: con.Sequelize.DATE
     }
 
 })

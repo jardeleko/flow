@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express()
 const Filme = require("../models/Filme")
+const Avaliacao = require("../models/Avaliacao")
+
 const multer = require('multer')
 const multerConfig = require("../config/multer")
 const uploads = multer(multerConfig)
@@ -36,9 +38,9 @@ router.get('/', (req, res) => {
 })
 
 router.post('/addfilm', uploads.single('send_img'), (req, res) => {
+
 	let erros = []
 	let tmpTipo
-
 
 	if(!req.body.filme || req.body.filme == null || req.body.filme === undefined)
 		tmpTipo = req.body.serie
@@ -129,25 +131,43 @@ router.get('/series', (req, res) =>{
 
 router.get('/filefilter/:id', (req, res) => {
 	var idteste = req.params.id;
-	Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {
-		var json = JSON.stringify(filmeseries);
-		alert(json);
-		if(filmeseries.comentario){
-			console.log("existe comentarios nesse filme")
-		}	
-		else {
-			console.log("pelo menos não deu warni")
-		}
-		res.render('file', {filmeseries: filmeseries})	
-	}).catch((err) => {
-		req.flash("error_msg", "Algo deu errado! escolha outra opção :(");
-		res.redirect('showdata')
+	Avaliacao.findAll({where: {'idFilm': idteste}}).then((avaliacao) => {
+		Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {	
+			res.render('file', {filmeseries: filmeseries, avaliacao: avaliacao})	
+		}).catch((err) => {
+			req.flash("error_msg", "Algo deu errado! escolha outra opção :(");
+			res.redirect('showdata')
+		})
 	})
 })
 
 router.post('/commits/:id', (req, res) => {
 	var idfilm = req.params.id;
-	res.render('index');
+	var erros_commit = [];
+	if(!req.body.starcommit || req.body.starcommit == undefined || req.body.starcommit == null)
+		erros_commit .push({message:"Nenhum comentario inserido"})
+	if(!req.body.starnota || req.body.starnota == undefined || req.body.starnota == null)
+		erros_commit.push({message:"Necessario classificar!"})
+
+	if(erros_commit > 0){
+		console.log(erros_commit)
+		res.render('showdata')
+	}
+	else{
+		Avaliacao.create({
+			idUser: 1,
+			nota: req.body.starnota,
+			comentario: req.body.starcommit,
+			idFilm: idfilm
+		}).then(() => {
+			req.flash("success_msg", "Comentário enviado com sucesso!")
+			res.redirect('/showdata')
+		}).catch((err) => {
+			req.flash("error_msg", "Erro ao comentar, verifique se todos os campos foram preenchidos e tente novamente!")
+			res.redirect('/showdata')
+			console.log(err)
+		})
+	}
 })
 
 router.get('/showdata', (req, res) => {

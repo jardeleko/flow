@@ -25,7 +25,7 @@
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
           <a class="navbar-brand" href="/" id="buttonFF"> 
-            <img src="img/asset2tratado.png" width="100" height="100">
+            <img src="/img/asset2tratado.png" width="100" height="100">
           </a>  
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -51,6 +51,26 @@
                   Séries
                 </a>
               </li>
+              
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                  Categorias
+                </a>
+                  <div class="dropdown-menu">
+                    <a class="dropdown-item" href="#">Terror</a>
+                    <a class="dropdown-item" href="#">Drama</a>
+                    <a class="dropdown-item" href="#">Suspense</a>
+                    <a class="dropdown-item" href="#">Romance</a>
+                    <a class="dropdown-item" href="#">Animação infantil</a>
+                    <a class="dropdown-item" href="#">Comédia</a>
+                    <a class="dropdown-item" href="#">ventura & ação</a>
+                    <a class="dropdown-item" href="#">Ficção científica</a>
+
+                      <!--div class="dropdown-divider"></div>
+                      <a class="dropdown-item" href="#">Separated link</a>
+                    </div-->
+                </div>
+              </li>
 
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
@@ -64,10 +84,31 @@
                       <a class="dropdown-item" href="#">Separated link</a>
                     </div-->
                 </div>
-            </li>
+              </li>
           </ul>
         </div>        
       </div>
     </nav>
   </header>
-  <br><br>
+  <br><br>  
+  <%if(error.length > 0){ %>
+    <div class="alert alert-danger"> <%= error %></div>
+<% } %>
+
+<% if (error_msg.length > 0){ %>
+  <div class="alert alert-danger">
+    <strong>Bad news :( </strong> <%= error_msg %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  
+<% } %>
+
+ <% if (success_msg.length > 0){ %>
+  <div class="alert alert-success">
+    <strong>SHOWWW!</strong> <%= success_msg %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+ <% } %>

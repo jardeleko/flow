@@ -45,12 +45,22 @@ const Filme = con.sequelize.define('filmeseries', {
     },
     comentario: {
         type: con.Sequelize.STRING
+    }, 
+    idCommmit: {
+        type: con.Sequelize.INTEGER
     }
 
 })
 module.exports = Filme;
-//  Filme.sync({force:true})
+//Filme.sync({force:true})
 /*
+,
+    idCommmit: {
+        type: con.Sequelize.INTEGER
+    }
+idCommit:{
+    type: con.Sequelize.INTEGER
+}
 idplatform: {
         type: con.Sequelize.INTEGER,
         autoIncrement:true,
