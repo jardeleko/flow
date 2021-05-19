@@ -1,7 +1,6 @@
 const con = require('./con');
 
 const Avaliacao = con.sequelize.define('avaliacao', {
-
     id: {
         type: con.Sequelize.INTEGER,
         primaryKey: true,

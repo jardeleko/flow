@@ -2,7 +2,7 @@ const express = require('express')
 const router = express()
 const Filme = require("../models/Filme")
 const Avaliacao = require("../models/Avaliacao")
-
+const Users = require('../models/Users')
 const multer = require('multer')
 const multerConfig = require("../config/multer")
 const uploads = multer(multerConfig)
@@ -10,12 +10,15 @@ const methodOverride = require("method-override")
 const session = require('express-session')
 const flash = require('connect-flash')
 const bodyParser = require('body-parser')
-	router.use(methodOverride('_method'))
+const bcrypt = require('bcryptjs')
+const passport = require('passport');
+require('../config/auth')(passport); 
 
-	//atual bodyparser
-	router.use(express.urlencoded({extended: true}))
-	router.use(express.json())
-
+router.use(methodOverride('_method'))
+router.use(express.urlencoded({extended: true})) 	//atual bodyparser
+router.use(express.json()) 
+router.use(passport.initialize())
+router.use(passport.session())		
 router.use(flash())
 router.use(session({
 	secret:'smartsky',
@@ -35,6 +38,59 @@ router.use(function(req, res, next)  {
 
 router.get('/', (req, res) => { 
 		res.render('index')
+})
+
+router.get('/create', (req, res) => {
+	res.render('create')
+})
+
+router.get('/showdata', (req, res) => {
+	Filme.findAll({order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+
+router.get('/netflix', (req, res) =>{
+	Filme.findAll({where:{'netflix':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/primevideos', (req, res) =>{
+	Filme.findAll({where:{'prime':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/gplay', (req, res) =>{
+	Filme.findAll({where:{'globo':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/filmes', (req, res) =>{
+	Filme.findAll({where:{'tipo':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/series', (req, res) =>{
+	Filme.findAll({where:{'tipo':2}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+})
+
+router.get('/filefilter/:id', (req, res) => {
+	var idteste = req.params.id;
+	Avaliacao.findAll({where: {'idFilm': idteste}}).then((avaliacao) => {
+		Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {	
+			res.render('file', {filmeseries: filmeseries, avaliacao: avaliacao})	
+		}).catch((err) => {
+			req.flash("error_msg", "Algo deu errado! escolha outra opção :(");
+			res.redirect('showdata')
+		})
+	})
 })
 
 router.post('/addfilm', uploads.single('send_img'), (req, res) => {
@@ -99,46 +155,42 @@ router.post('/addfilm', uploads.single('send_img'), (req, res) => {
 	}
 })
 
-router.get('/netflix', (req, res) =>{
-	Filme.findAll({where:{'netflix':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
-		res.render('showdata', {filmeseries: filmeseries})
-	})
-})
+router.post('/createacc', (req, res) => {
+	var pgcreate = []
 
-router.get('/primevideos', (req, res) =>{
-	Filme.findAll({where:{'prime':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
-		res.render('showdata', {filmeseries: filmeseries})
-	})
-})
+	if(!req.body.nome || req.body.nome == undefined || req.body.nome == '')
+		pgcreate.push({message: "Faltou o nome, tente novamente"})
+	if(!req.body.username || req.body.username == undefined || req.body.username == '')
+		pgcreate.push({message: "Faltou inserir o username"})
+	if(!req.body.email || req.body.email == undefined || req.body.email == '')
+		pgcreate.push({message: "Necessario um email válido"})
+	if(req.body.senha != req.body.confirm)
+		pgcreate.push({message: "Senha não confere"})
+	if(pgcreate.length > 0){
+		req.flash("error_msg", "O formulario precisa ser preenchido corretamente")
+		res.redirect('/create')
+	}
+	else {
+		let password = req.body.senha;
+		const salt = bcrypt.genSaltSync(10);
+		const hash = bcrypt.hashSync(password, salt); 
+		password = hash;
 
-router.get('/gplay', (req, res) =>{
-	Filme.findAll({where:{'globo':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
-		res.render('showdata', {filmeseries: filmeseries})
-	})
-})
-
-router.get('/filmes', (req, res) =>{
-	Filme.findAll({where:{'tipo':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
-		res.render('showdata', {filmeseries: filmeseries})
-	})
-})
-
-router.get('/series', (req, res) =>{
-	Filme.findAll({where:{'tipo':2}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
-		res.render('showdata', {filmeseries: filmeseries})
-	})
-})
-
-router.get('/filefilter/:id', (req, res) => {
-	var idteste = req.params.id;
-	Avaliacao.findAll({where: {'idFilm': idteste}}).then((avaliacao) => {
-		Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {	
-			res.render('file', {filmeseries: filmeseries, avaliacao: avaliacao})	
-		}).catch((err) => {
-			req.flash("error_msg", "Algo deu errado! escolha outra opção :(");
-			res.redirect('showdata')
+		Users.create({ 
+			nome: req.body.nome,
+			email: req.body.email,
+			username: req.body.username,
+			senha: password,
+			iAdmin: 0
+		}).then(()=>{
+			req.flash("success_msg", "Bem vindo!")
+			res.redirect('/create')			
+		}).catch((err) =>{
+			req.flash("error_msg", "Falha, username ou email ja cadastrado")
+			res.redirect('/create')
 		})
-	})
+	}
+
 })
 
 router.post('/commits/:id', (req, res) => {
@@ -168,13 +220,17 @@ router.post('/commits/:id', (req, res) => {
 			console.log(err)
 		})
 	}
+	
 })
 
-router.get('/showdata', (req, res) => {
-	Filme.findAll({order:[['nota', 'DESC']]}).then((filmeseries) => {
-		res.render('showdata', {filmeseries: filmeseries})
+router.delete('/deletecommit/:id', (req, res) => {
+	Avaliacao.destroy({where: {'id': req.params.id}}).then(() => {
+		req.flash("success_msg", "Comentário deletado com sucesso!")
+		res.redirect('/showdata')
+	}).catch((err) => {
+		req.flash("error_msg", "Erro ao deletar o comentário")
+		res.redirect('/showdata')
 	})
-
 })
 
 module.exports = router;

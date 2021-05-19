@@ -1,5 +1,5 @@
 const con = require('./con');
-const Users = con.sequelize.define('users', {
+const Users = con.sequelize.define('user', {
 
     id: {
         type: con.Sequelize.INTEGER,
@@ -14,26 +14,19 @@ const Users = con.sequelize.define('users', {
     email: {
         type: con.Sequelize.STRING,
         allowNull: false
-
     },
     username:{
         type: con.Sequelize.STRING,
         allowNull: false
-
     },
     senha: {
         type: con.Sequelize.STRING,
         allowNull: false
     },
-    idAv: {
-        type: con.Sequelize.INTEGER,
-        allowNull: false
-    },
     idAdmin: {
-        type: con.Sequelize.INTEGER,
-        allowNull: false
+        type: con.Sequelize.INTEGER
     }
-
 })
+
 module.exports = Users;
 //Users.sync({force:true})

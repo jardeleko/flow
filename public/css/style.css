@@ -44,7 +44,9 @@ img{
     width:87%;    
  }
  body{
-     background-image: url('../img/bg.jpeg');
+    background-image: linear-gradient(black, #630080);
+
+     /*background-image: url('../img/bg.jpeg');*/
  }
 
  
@@ -65,5 +67,18 @@ img{
 
     .row.r2:after {
         width: 95%
+    }
+}
+
+@media screen and (max-width: 360px) {
+    .container {
+        width: 95%
+    }
+
+    .row.r2:after {
+        width: 95%
+    }
+    .row r3{
+        border-left: 10px;
     }
 }

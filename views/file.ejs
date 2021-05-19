@@ -8,7 +8,7 @@
   }  
 
   .cssrat{
-      color:darkgoldenrod;
+      color:rgb(197, 194, 20);
   }
   .btn{
       color:cornsilk;
@@ -76,21 +76,26 @@
     </div>
     <% } %>
 </div>
-<div class="container pt-3 bg-light text-white" style="border-radius: 0;">
-    <div class="card text" style="color: black;">
+
+<div class="container pt-3 bg-dark text-white" style="border-radius: 0;">
+    <div class="card text" style="color: rgb(41, 42, 43); border-radius: 10px;">
         <div class="card-header">
         Comentários
         </div>
             <% for(const avl of avaliacao) {%> 
-            <div class="card-body">
-                <h5 class="card-title"><strong>Username</strong> </h5>
-                <p class="card-text"><%=avl.comentario%></p>
+            <div class="card-body bg-light">
+                <h5 class="card-title" ><strong>Username</strong> </h5>
+                <p class="card-text"><%=avl.comentario%></p> <span class="glyphicon glyphicon-thumbs-up" style="color: rgb(83, 167, 0);">curtir </span> _ <span class="glyphicon glyphicon-thumbs-down" style="color: brown;">descurtir</span>
+                <form action="<%=`/deletecommit/${avl.id}/?_method=DELETE`%>" method="POST">                              
+                    <button class="btn glyphicon glyphicon-trash " type="submit" style="color: rgb(51, 105, 253);">apagar</button>
+                </form>
+                <p class="text-muted"> enviado em <%=avl.createdAt%></p>  
+                <div class="card-footer"></div>
             </div>
-            <div class="card-footer text-muted"> enviado em <%=avl.createdAt%>
-            </div>
-            <span class="btn" style="color: black;" ><a href="#">apagar</a></span>
+           
             <% } %>
 
     </div>
 
 </div>
+<%-include('footer')%>
