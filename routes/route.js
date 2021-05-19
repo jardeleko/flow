@@ -43,6 +43,14 @@ router.get('/', (req, res) => {
 router.get('/create', (req, res) => {
 	res.render('create')
 })
+router.get('/login', (req, res) => {
+	res.render('login')
+})
+router.get('/logout', (req, res, next) => {
+	req.logout();
+	res.redirect('/login');
+	next()
+})
 
 router.get('/showdata', (req, res) => {
 	Filme.findAll({order:[['nota', 'DESC']]}).then((filmeseries) => {
@@ -91,6 +99,14 @@ router.get('/filefilter/:id', (req, res) => {
 			res.redirect('showdata')
 		})
 	})
+})
+
+router.post('/confirm_auth', (req, res, next) => {
+	passport.authenticate("local", {
+		successRedirect: "/",
+		failureRedirect: "/login",
+		failureFlash: true 
+	})(req, res, next)
 })
 
 router.post('/addfilm', uploads.single('send_img'), (req, res) => {
@@ -183,8 +199,8 @@ router.post('/createacc', (req, res) => {
 			senha: password,
 			iAdmin: 0
 		}).then(()=>{
-			req.flash("success_msg", "Bem vindo!")
-			res.redirect('/create')			
+			req.flash("success_msg", "Bem vindo! agora é só você logar")
+			res.redirect('/login')			
 		}).catch((err) =>{
 			req.flash("error_msg", "Falha, username ou email ja cadastrado")
 			res.redirect('/create')

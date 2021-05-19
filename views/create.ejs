@@ -19,7 +19,29 @@
 
 </head>
 <body>
+<br><br><br>
 
+<%if(error.length > 0){ %>
+    <div class="alert alert-danger"> <%= error %></div>
+<% } %>
+
+<% if (error_msg.length > 0){ %>
+  <div class="alert alert-danger">
+    <strong>Bad news :( </strong> <%= error_msg %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>  
+<% } %>
+
+ <% if (success_msg.length > 0){ %>
+  <div class="alert alert-success">
+    <strong>SHOWWW!</strong> <%= success_msg %>
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+ <% } %>
 <style>
 
 body {
@@ -27,7 +49,7 @@ body {
 }
 
 .main {
-    background-color: #fff
+    background-color: transparent
 }
 
 .mycol {
@@ -46,12 +68,12 @@ body {
 }
 
 .btn {
-    background-image: linear-gradient(black, #630080, black);
+    background-image: linear-gradient(#630080, rgb(243, 219, 0));
     color: white;
     width: 100%;
     height: 50px;
     border: none;
-    border-radius: 100px
+    border-radius: 10px
 }
 
 .btn span {
@@ -59,6 +81,24 @@ body {
     font-weight: bold
 }
 
+a:link {
+  color: red;
+}
+
+/* visited link */
+a:visited {
+  color: rgb(250, 183, 0);
+}
+
+/* mouse over link */
+a:hover {
+    color: rgb(255, 255, 255);
+}
+
+/* selected link */
+a:active {
+  color: greenyellow;
+}
 
 .form-control {
     border: none;
@@ -98,13 +138,13 @@ body {
 }
 </style>
 <div class="container d-flex justify-content-center my-5">
-    <div class="row my-2 mx-2 main" style="border-radius:20px;">
+    <div class="row my-2 mx-2 main" style="border-radius:5px;">
         <!--left-column-->
         <div class="col-md-4 col-12 mycol">
-            <!--image--> <img src="/img/purpleimg.png" style="border-radius:0px;"  width="100%" height="100%"> </div>
+            <!--image--> <img src="/img/purpleimg.png" style="border-radius:14px;"  width="100%" height="100%"> </div>
         <!--right-column-->
         <div class="col-md-8 col-12 xcol">
-            <h2 class="title pt-5 pb-3">CRIE SUA CONTA AGORA! </h2>
+            <h2 class="title pt-5 pb-3" style="color: white;">CRIE SUA CONTA AGORA! </h2>
             
             <form class="myform" action="/createacc" method="POST">
                 <div class="row rone">
@@ -138,7 +178,7 @@ body {
                         </button> 
                     </div>
                     <div class="form-group col-md-6 feight py-3">
-                        <p class="text-muted">Ja possui uma conta?<br><a href="#">clique aqui</a></p>
+                        <p style="color: white;">Ja possui uma conta?<br><a href="/login">clique aqui</a></p>
                     </div>
                 </div>
             </form>
@@ -147,26 +187,5 @@ body {
     </div>
 </div>
 
-<%if(error.length > 0){ %>
-    <div class="alert alert-danger"> <%= error %></div>
-<% } %>
-
-<% if (error_msg.length > 0){ %>
-  <div class="alert alert-danger">
-    <strong>Bad news :( </strong> <%= error_msg %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>  
-<% } %>
-
- <% if (success_msg.length > 0){ %>
-  <div class="alert alert-success">
-    <strong>SHOWWW!</strong> <%= success_msg %>
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
- <% } %>
 
 <%-include('footer')%>
