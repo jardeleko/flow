@@ -9,16 +9,16 @@ module.exports = function(passport){
        
         Users.findOne({
            where:{
-                username: [username]
-            }}).then((user) => {
+                user: [username]
+            }}).then((users) => {
 
-                if(!user) {
+                if(!users) {
                     return done(null, false, {message: "Usuario não encontrado"})
                 }
         
-                bcrypt.compare(senha, user.senha, (err, login) => {
+                bcrypt.compare(senha, users.passw, (err, login) => {
                     if(login){
-                        return done(null, user)
+                        return done(null, users)
                     }
                     else{
                         return done(null, false, {message: "senha errada"})

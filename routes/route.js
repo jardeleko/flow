@@ -9,22 +9,23 @@ const uploads = multer(multerConfig)
 const methodOverride = require("method-override")
 const session = require('express-session')
 const flash = require('connect-flash')
-const bodyParser = require('body-parser')
 const bcrypt = require('bcryptjs')
-const passport = require('passport');
-require('../config/auth')(passport); 
-
-router.use(methodOverride('_method'))
-router.use(express.urlencoded({extended: true})) 	//atual bodyparser
-router.use(express.json()) 
-router.use(passport.initialize())
-router.use(passport.session())		
-router.use(flash())
+const passport = require('passport')
+require('../config/auth')(passport) 
 router.use(session({
 	secret:'smartsky',
 	resave: true,
 	saveUninitialized: true
 }));
+router.use(require('body-parser').urlencoded({ extended: true }));
+router.use(require('cookie-parser')());
+router.use(passport.initialize());
+router.use(passport.session());
+router.use(methodOverride('_method'))
+router.use(express.urlencoded({extended: true})) 	//atual bodyparser
+router.use(express.json()) 
+router.use(flash())
+
 
 //função para inicio de validação com node javascript 
 router.use(function(req, res, next)  {
@@ -35,14 +36,36 @@ router.use(function(req, res, next)  {
 	next() //atualiza pagina
 })	
 
+function iAdmin(req, res, next){
+	if(req.isAuthenticated() && req.user.iAdmin == 1)  return next();
+	res.redirect('/showdata')
+}
 
-router.get('/', (req, res) => { 
-		res.render('index')
+function checkAuthentication(req,res,next){
+    if(req.isAuthenticated()){
+        //req.isAuthenticated() will return true if user is logged in
+        next();
+    } else{
+        res.redirect("/login");
+    }
+}
+
+router.get('/', (req, res) => {
+	console.log(req.user)
+	
+	if(req.isAuthenticated() && req.user.idAdmin == 1) {
+		let sucesso;
+		sucesso = "Bem vindo novamente! Um brinde a nossa amizade!"
+		res.render('index', {sucesso : sucesso});
+	}
+	else res.redirect('/showdata');	
 })
+
 
 router.get('/create', (req, res) => {
 	res.render('create')
 })
+
 router.get('/login', (req, res) => {
 	res.render('login')
 })
@@ -52,44 +75,94 @@ router.get('/logout', (req, res, next) => {
 	next()
 })
 
-router.get('/showdata', (req, res) => {
+router.get('/showdata',checkAuthentication, (req, res) => {
 	Filme.findAll({order:[['nota', 'DESC']]}).then((filmeseries) => {
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 
 })
 
-router.get('/netflix', (req, res) =>{
+router.get('/terror',checkAuthentication, (req, res) => {
+	Filme.findAll({where:{'categoria':'Terror'},order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+router.get('/drama',checkAuthentication, (req, res) => {
+	Filme.findAll({where:{'categoria':'Drama'},order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+
+router.get('/suspense',checkAuthentication, (req, res) => {
+	Filme.findAll({where:{'categoria':'Suspense'},order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+router.get('/romance',checkAuthentication, (req, res) => {
+	Filme.findAll({where:{'categoria':'Romance'},order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+router.get('/animacao',checkAuthentication, (req, res) => {
+	Filme.findAll({where:{'categoria':'Animacao'},order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+router.get('/comedia',checkAuthentication, (req, res) => {
+	Filme.findAll({where:{'categoria':'Comedia'},order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+router.get('/aventura',checkAuthentication, (req, res) => {
+	Filme.findAll({where:{'categoria':'Aventura'},order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+router.get('/ficcao',checkAuthentication, (req, res) => {
+	Filme.findAll({where:{'categoria':'Ficcao'},order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+
+router.get('/netflix',checkAuthentication, (req, res) =>{
 	Filme.findAll({where:{'netflix':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 })
 
-router.get('/primevideos', (req, res) =>{
+router.get('/primevideos',checkAuthentication, (req, res) =>{
 	Filme.findAll({where:{'prime':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 })
 
-router.get('/gplay', (req, res) =>{
+router.get('/gplay',checkAuthentication, (req, res) =>{
 	Filme.findAll({where:{'globo':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 })
 
-router.get('/filmes', (req, res) =>{
+router.get('/filmes',checkAuthentication, (req, res) =>{
 	Filme.findAll({where:{'tipo':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 })
 
-router.get('/series', (req, res) =>{
+router.get('/series',checkAuthentication, (req, res) =>{
 	Filme.findAll({where:{'tipo':2}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 })
 
-router.get('/filefilter/:id', (req, res) => {
+router.get('/filefilter/:id',checkAuthentication, (req, res) => {
 	var idteste = req.params.id;
 	Avaliacao.findAll({where: {'idFilm': idteste}}).then((avaliacao) => {
 		Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {	
@@ -109,7 +182,8 @@ router.post('/confirm_auth', (req, res, next) => {
 	})(req, res, next)
 })
 
-router.post('/addfilm', uploads.single('send_img'), (req, res) => {
+
+router.post('/addfilm', iAdmin, uploads.single('send_img'), (req, res) => {
 
 	let erros = []
 	let tmpTipo
@@ -195,8 +269,8 @@ router.post('/createacc', (req, res) => {
 		Users.create({ 
 			nome: req.body.nome,
 			email: req.body.email,
-			username: req.body.username,
-			senha: password,
+			user: req.body.username,
+			passw: password,
 			iAdmin: 0
 		}).then(()=>{
 			req.flash("success_msg", "Bem vindo! agora é só você logar")
@@ -209,7 +283,7 @@ router.post('/createacc', (req, res) => {
 
 })
 
-router.post('/commits/:id', (req, res) => {
+router.post('/commits/:id', checkAuthentication, (req, res) => {
 	var idfilm = req.params.id;
 	var erros_commit = [];
 	if(!req.body.starcommit || req.body.starcommit == undefined || req.body.starcommit == null)
@@ -239,7 +313,7 @@ router.post('/commits/:id', (req, res) => {
 	
 })
 
-router.delete('/deletecommit/:id', (req, res) => {
+router.delete('/deletecommit/:id', checkAuthentication, (req, res) => {
 	Avaliacao.destroy({where: {'id': req.params.id}}).then(() => {
 		req.flash("success_msg", "Comentário deletado com sucesso!")
 		res.redirect('/showdata')

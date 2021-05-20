@@ -12,26 +12,69 @@
     <link rel="stylesheet"  href="/css/bootstrap.css">
     <link rel="stylesheet"  href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="icon" href="img/assettittle.png">
-    <link rel='stylesheet' href='//maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'/>
-    <link href="https://fonts.googleapis.com/css2?family=Caveat&family=Dancing+Script&family=Open+Sans:ital@1&display=swap" rel="stylesheet">    
+<style>
 
+  /* visited link */
+a:visited {
+  color:#630080;
+}
 
-    <title> Flow Filmes </title>
+/* mouse over link */
+a:hover {
+    color: rgb(255, 255, 255);
+}
+
+/* selected link */
+a:active {
+  color: greenyellow;
+}
+  .navbar{
+       background: #000000
+ }
+
+ .nav-item::after {
+     content: '';
+     display: block;
+     width: 0px;
+     height: 2px;
+     background: #fec400;
+     transition: 0.4s
+ }
+
+ .nav-item:hover::after {
+     width: 100%
+ }
+
+ .navbar-dark .navbar-nav .active>.nav-link,
+ .navbar-dark .navbar-nav .nav-link.active,
+ .navbar-dark .navbar-nav .nav-link.show,
+ .navbar-dark .navbar-nav .show>.nav-link,
+ .navbar-dark .navbar-nav .nav-link:focus,
+ .navbar-dark .navbar-nav .nav-link:hover {
+     color: #fec400
+ }
+
+ .nav-link {
+     padding: 25px 5px;
+     transition: 0.2s
+ }
+
+</style>
+
+  <title> Flow Filmes </title>
   </head>
   <body>
     <header>
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="/" id="buttonFF"> 
-            <img src="/img/oieasset.gif" width="100" height="100">
-          </a>  
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+      
+      <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: transparent;">  
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"  aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon">
+            </span>
           </button>
+
           <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav">
+            <ul class="navbar-nav ml-auto">
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="/">
                   Página inicial
@@ -57,14 +100,14 @@
                   Categorias
                 </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="#">Terror</a>
-                    <a class="dropdown-item" href="#">Drama</a>
-                    <a class="dropdown-item" href="#">Suspense</a>
-                    <a class="dropdown-item" href="#">Romance</a>
-                    <a class="dropdown-item" href="#">Animação infantil</a>
-                    <a class="dropdown-item" href="#">Comédia</a>
-                    <a class="dropdown-item" href="#">ventura & ação</a>
-                    <a class="dropdown-item" href="#">Ficção científica</a>
+                    <a class="dropdown-item" href="/terror">Terror</a>
+                    <a class="dropdown-item" href="/drama">Drama</a>
+                    <a class="dropdown-item" href="/suspense">Suspense</a>
+                    <a class="dropdown-item" href="/romance">Romance</a>
+                    <a class="dropdown-item" href="/animacao">Animação infantil</a>
+                    <a class="dropdown-item" href="/comedia">Comédia</a>
+                    <a class="dropdown-item" href="/aventura">Aventura & ação</a>
+                    <a class="dropdown-item" href="/ficcao">Ficção científica</a>
 
                       <!--div class="dropdown-divider"></div>
                       <a class="dropdown-item" href="#">Separated link</a>
@@ -77,9 +120,21 @@
                   Plataformas
                 </a>
                   <div class="dropdown-menu">
-                    <a class="dropdown-item" href="/netflix">Netflix</a>
-                    <a class="dropdown-item" href="/primevideos">Amazon Prime Vídeos</a>
-                    <a class="dropdown-item" href="/gplay">Google Play</a>
+                    <a class="dropdown-item" href="/netflix"> 
+                      <div class="fa-icon text-center"> 
+                        <img src="/img/netflixbt.png" width="30" height="30" alt="netflix"> 
+                      </div>
+                    </a>
+                    <a class="dropdown-item" href="/primevideos">
+                      <div class="fa-icon text-center"> 
+                        <img src="/img/whitebtn.png" width="30" height="30" alt="primevideos"> 
+                      </div>
+                    </a>
+                    <a class="dropdown-item" href="/gplay">
+                      <div class="fa-icon text-center"> 
+                        <img src="/img/gplay.png" width="30" height="30" alt="globoplay"> 
+                      </div>  
+                    </a>
                       <!--div class="dropdown-divider"></div>
                       <a class="dropdown-item" href="#">Separated link</a>
                     </div-->
@@ -118,3 +173,5 @@
     </button>
   </div>
  <% } %>
+
+

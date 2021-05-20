@@ -1,5 +1,4 @@
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital@1&display=swap');
-    
 
 #buttonFF{
     position: relative;
@@ -44,8 +43,8 @@ img{
     width:87%;    
  }
  body{
-    background-image: linear-gradient(black, #630080);
-
+    background-image: linear-gradient(#630080, rgb(0, 0, 0)) ;
+    
      /*background-image: url('../img/bg.jpeg');*/
  }
 
