@@ -5,11 +5,18 @@ const Avaliacao = con.sequelize.define('avaliacao', {
         type: con.Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true,
-        allowNull: false		
 	},
+    nomeUser: {
+        type: con.Sequelize.STRING,
+        allowNull: false
+    },
 	idUser: {
-        type: con.Sequelize.INTEGER
+        type: con.Sequelize.INTEGER,
+        allowNull: false
 	},
+    imgUser:{
+        type: con.Sequelize.STRING
+    },
     nota: {
         type: con.Sequelize.DOUBLE
     },

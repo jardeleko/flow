@@ -24,9 +24,16 @@ const Users = con.sequelize.define('users', {
     },
     idAdmin: {
         type: con.Sequelize.INTEGER
+    },
+    imgPerfil: {
+        type: con.Sequelize.STRING
     }
 })
 
 
 module.exports = Users;
-//Users.sync({force:true})
+//Users.sync({force:true}) 
+/*fotoprofile{
+    type: con.Sequelize.STRING
+}
+*/

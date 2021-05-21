@@ -32,14 +32,9 @@ router.use(function(req, res, next)  {
 	res.locals.success_msg = req.flash("success_msg") //insere mensagens de sucesso geradas no array erros em uma variavel local na pagina html
 	res.locals.error_msg = req.flash("error_msg") //   msg de error atribuidas no locals do html 
 	res.locals.error = req.flash("error")
-	res.locals.users = req.user || null
+	res.locals.users = req.user 
 	next() //atualiza pagina
 })	
-
-function iAdmin(req, res, next){
-	if(req.isAuthenticated() && req.user.iAdmin == 1)  return next();
-	res.redirect('/showdata')
-}
 
 function checkAuthentication(req,res,next){
     if(req.isAuthenticated()){
@@ -50,13 +45,12 @@ function checkAuthentication(req,res,next){
     }
 }
 
-router.get('/', (req, res) => {
-	console.log(req.user)
-	
-	if(req.isAuthenticated() && req.user.idAdmin == 1) {
-		let sucesso;
-		sucesso = "Bem vindo novamente! Um brinde a nossa amizade!"
-		res.render('index', {sucesso : sucesso});
+
+router.get('/', checkAuthentication, (req, res) => {
+	var teste = req.user.idAdmin;
+
+	if(teste == 1){
+		res.render('index')
 	}
 	else res.redirect('/showdata');	
 })
@@ -73,6 +67,13 @@ router.get('/logout', (req, res, next) => {
 	req.logout();
 	res.redirect('/login');
 	next()
+})
+
+router.get('/profile', (req, res) => {
+	var dados = req.user;
+	Users.findAll({where: {'id': dados.id}}).then((users) => {
+		res.render('profile', {dados:dados})
+	})
 })
 
 router.get('/showdata',checkAuthentication, (req, res) => {
@@ -163,10 +164,11 @@ router.get('/series',checkAuthentication, (req, res) =>{
 })
 
 router.get('/filefilter/:id',checkAuthentication, (req, res) => {
-	var idteste = req.params.id;
+	var idteste = req.params.id
+	var user = req.user
 	Avaliacao.findAll({where: {'idFilm': idteste}}).then((avaliacao) => {
-		Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {	
-			res.render('file', {filmeseries: filmeseries, avaliacao: avaliacao})	
+		Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {					
+			res.render('file', {filmeseries: filmeseries, avaliacao: avaliacao, user:user})	
 		}).catch((err) => {
 			req.flash("error_msg", "Algo deu errado! escolha outra opção :(");
 			res.redirect('showdata')
@@ -183,7 +185,7 @@ router.post('/confirm_auth', (req, res, next) => {
 })
 
 
-router.post('/addfilm', iAdmin, uploads.single('send_img'), (req, res) => {
+router.post('/addfilm', uploads.single('send_img'), (req, res) => {
 
 	let erros = []
 	let tmpTipo
@@ -219,7 +221,7 @@ router.post('/addfilm', iAdmin, uploads.single('send_img'), (req, res) => {
 	
 	if(erros.length > 0){
 		req.flash("error_msg", "Preencha todos os campos com atenção")
-		res.redirect('/')
+		res.render('/', {erros:erros})
 	}
 
 	else {
@@ -247,7 +249,6 @@ router.post('/addfilm', iAdmin, uploads.single('send_img'), (req, res) => {
 
 router.post('/createacc', (req, res) => {
 	var pgcreate = []
-
 	if(!req.body.nome || req.body.nome == undefined || req.body.nome == '')
 		pgcreate.push({message: "Faltou o nome, tente novamente"})
 	if(!req.body.username || req.body.username == undefined || req.body.username == '')
@@ -271,7 +272,8 @@ router.post('/createacc', (req, res) => {
 			email: req.body.email,
 			user: req.body.username,
 			passw: password,
-			iAdmin: 0
+			iAdmin: 0,
+			imgPerfil: 'default.png'
 		}).then(()=>{
 			req.flash("success_msg", "Bem vindo! agora é só você logar")
 			res.redirect('/login')			
@@ -284,6 +286,7 @@ router.post('/createacc', (req, res) => {
 })
 
 router.post('/commits/:id', checkAuthentication, (req, res) => {
+	console.log(req.user);
 	var idfilm = req.params.id;
 	var erros_commit = [];
 	if(!req.body.starcommit || req.body.starcommit == undefined || req.body.starcommit == null)
@@ -297,7 +300,9 @@ router.post('/commits/:id', checkAuthentication, (req, res) => {
 	}
 	else{
 		Avaliacao.create({
-			idUser: 1,
+			nomeUser:req.user.user,
+			idUser: req.user.id,
+			imgUser: req.user.imgPerfil,
 			nota: req.body.starnota,
 			comentario: req.body.starcommit,
 			idFilm: idfilm
@@ -311,6 +316,39 @@ router.post('/commits/:id', checkAuthentication, (req, res) => {
 		})
 	}
 	
+})
+router.put('/putprofile/:id', uploads.single('imgperfil'), (req, res) => {
+	var newnome, newmail, newuser, newimg;
+	if(!req.body.nomeatl || req.body.nomeatl == undefined)
+		newnome = req.user.nome
+	else 
+		newnome = req.body.nomeatl
+	if(!req.body.emailatl || req.body.emailatl == undefined)
+		newmail = req.user.email
+	else 
+		newmail = req.body.emailatl
+	if(!req.body.usernameatl || req.body.usernameatl == undefined)
+		newuser = req.user.user
+	else 
+		newuser = req.body.usernameatl
+	if(!req.file || req.file == 'undefined' || req.file == null)
+		newimg = 'default.png'
+	else 
+		newimg = req.file.filename 
+
+	Users.update({
+		nome: newnome,
+		email: newmail,
+		user: newuser,
+		imgPerfil: newimg},
+		{where: {'id': req.params.id}}).then((users) => {
+			req.flash("success_msg", "Dados atualizados com sucesso!")
+			res.redirect('/profile')
+		}).catch((err) => {
+			req.flash("error_msg", "Algo deu errado, tente novamente")
+			res.redirect('/profile')
+			
+	})
 })
 
 router.delete('/deletecommit/:id', checkAuthentication, (req, res) => {

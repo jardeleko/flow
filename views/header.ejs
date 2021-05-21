@@ -12,7 +12,7 @@
     <link rel="stylesheet"  href="/css/bootstrap.css">
     <link rel="stylesheet"  href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> 
-    <link rel="icon" href="img/assettittle.png">
+    <link rel="icon" href="/img/assettittle.png">
 <style>
 
   /* visited link */
@@ -66,7 +66,7 @@ a:active {
   </head>
   <body>
     <header>
-      
+   
       <nav class="navbar navbar-expand-lg navbar-dark " style="background-color: transparent;">  
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"  aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon">
@@ -74,6 +74,17 @@ a:active {
           </button>
 
           <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="/profile">
+                  <div class="fa-icon"> 
+                    <%if(locals.users){%>
+                    <img src=<%=`/uploads/${locals.users.imgPerfil}`%> width="30" height="30" alt="perfil" style="border-radius: 100px"> Perfil
+                      <%}%>
+                  </div>            
+                </a>
+              </li>
+            </ul>
             <ul class="navbar-nav ml-auto">
               <li class="nav-item">
                 <a class="nav-link" aria-current="page" href="/">
