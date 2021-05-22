@@ -18,32 +18,31 @@
                             <span><%= fands.nome %></span>
                             <span class="text-black-50"><%= fands.categoria %> </span>
                                 <span class="ratings">
-
-                                <%if(fands.nota == 1) { %>
-                                    <i class="fa fa-star"></i>
-                                <% } %>
-                                <%if(fands.nota == 2) { %>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                <% } %>
-                                <%if(fands.nota == 3) { %>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                <% } %> 
-                                <%if(fands.nota == 4) { %>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                <% } %> 
-                                <%if(fands.nota == 5) { %>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                    <i class="fa fa-star"></i>
-                                <% } %> 
+                                    <%if(fands.nota <= 1) { %>
+                                        <i class="fa fa-star"></i>
+                                    
+                                    <%}else if(fands.nota <= 2) { %>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    
+                                    <%}else if(fands.nota <= 3) { %>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                     
+                                    <%}else if(fands.nota <= 4) { %>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                     
+                                    <%}else if(fands.nota <= 5) { %>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                        <i class="fa fa-star"></i>
+                                    <% } %> 
                                 <%= fands.nota %>
                             </span>
                         </div>

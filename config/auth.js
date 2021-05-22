@@ -33,7 +33,7 @@ module.exports = function(passport){
      
     });
     // deserialize user 
-    passport.deserializeUser(function(id, done) {
+    passport.deserializeUser(function(res, id, done) {
     Users.findByPk(id).then(function(user) {
  
         if (user) {
@@ -41,11 +41,8 @@ module.exports = function(passport){
  
         } else {
             done(user.errors, null);
- 
         }
- 
       });
- 
     });
 
 }

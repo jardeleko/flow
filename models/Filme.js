@@ -13,7 +13,7 @@ const Filme = con.sequelize.define('filmeseries', {
         allowNull: false		
 	},
     data: {
-        type: con.Sequelize.DATE,
+        type: con.Sequelize.STRING,
         allowNull: false		
     },
     tipo:{
@@ -24,9 +24,6 @@ const Filme = con.sequelize.define('filmeseries', {
         type: con.Sequelize.STRING,
         allowNull: false		
 	},
-	nota: {
-        type: con.Sequelize.DOUBLE
-    },
     faixaetaria: {
         type: con.Sequelize.INTEGER,
         allowNull: false 
@@ -43,11 +40,8 @@ const Filme = con.sequelize.define('filmeseries', {
     img:{
         type: con.Sequelize.STRING
     },
-    comentario: {
-        type: con.Sequelize.STRING
-    }, 
-    idCommmit: {
-        type: con.Sequelize.INTEGER
+    nota: {
+        type: con.Sequelize.DOUBLE
     }
 
 })

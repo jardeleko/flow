@@ -10,6 +10,7 @@ const methodOverride = require("method-override")
 const session = require('express-session')
 const flash = require('connect-flash')
 const bcrypt = require('bcryptjs')
+const {	score, rate, average } = require('average-rating');
 const passport = require('passport')
 require('../config/auth')(passport) 
 router.use(session({
@@ -47,9 +48,8 @@ function checkAuthentication(req,res,next){
 
 
 router.get('/', checkAuthentication, (req, res) => {
-	var teste = req.user.idAdmin;
-
-	if(teste == 1){
+	var admin = req.user.idAdmin;
+	if(admin == 1){
 		res.render('index')
 	}
 	else res.redirect('/showdata');	
@@ -166,8 +166,39 @@ router.get('/series',checkAuthentication, (req, res) =>{
 router.get('/filefilter/:id',checkAuthentication, (req, res) => {
 	var idteste = req.params.id
 	var user = req.user
+	let a = 0;
+	let b = 0;
+	let c = 0;
+	let d = 0;
+	let e = 0;
+	Avaliacao.findAll({where: {'idFilm': idteste}}).then((result) => {
+		for (let index = 0; index < result.length; index++) {
+			if(result[index].nota === 1) a++;
+			else if(result[index].nota === 2) b++;
+			else if(result[index].nota === 3) c++;
+			else if(result[index].nota === 4) d++;
+			else if(result[index].nota === 5) e++;
+			console.log(result[index].nota)
+		}
+		const rating = [a, b, c, d, e];
+		var total = average(rating); // --> 4.4
+		console.log('tratou os dados sem problema' + '\n1:'+ a + '\n2:'+ b +'\n3:'+ c + '\n4:'+d + '\n5:'+e+ '\ntotal:'+total)	
+		Filme.update({
+			nota: total},
+			{where: {'id': idteste}}).then(() => {
+				console.log('que bom que atualizou esta tarefa')
+			}).catch((err) => {
+				console.log(err);
+		})
+
+	}).catch((err) => {
+		console.log('problema no countners and conutners')
+	})
+
+/*findAndCountAll
+*/
 	Avaliacao.findAll({where: {'idFilm': idteste}}).then((avaliacao) => {
-		Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {					
+		Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {			
 			res.render('file', {filmeseries: filmeseries, avaliacao: avaliacao, user:user})	
 		}).catch((err) => {
 			req.flash("error_msg", "Algo deu errado! escolha outra opção :(");
@@ -186,10 +217,15 @@ router.post('/confirm_auth', (req, res, next) => {
 
 
 router.post('/addfilm', uploads.single('send_img'), (req, res) => {
-
+	var sinc = req.body.since;
+	var splita = String(sinc).split("-");
+	let ano = splita[0]
+	let mes = splita[1]
+	let dia = splita[2] 
+	var pformat = dia+'/'+mes+'/'+ano
+	
 	let erros = []
 	let tmpTipo
-
 	if(!req.body.filme || req.body.filme == null || req.body.filme === undefined)
 		tmpTipo = req.body.serie
 	else 
@@ -208,7 +244,6 @@ router.post('/addfilm', uploads.single('send_img'), (req, res) => {
 		var netflix = 0;
 	else 
 		netflix = 1;
-
 	
 	if(!req.body.titulo || req.body.titulo == undefined || req.body.titulo == null)
 		erros.push({message:"O título está vazio"})
@@ -218,16 +253,14 @@ router.post('/addfilm', uploads.single('send_img'), (req, res) => {
 		erros.push({message:"Preencha o campo de categorias e tente novamente"})
 	if(!req.file || req.file == undefined || req.file == null)
 		erros.push({message:"Quase lá, faltou anexar uma imagem"})
-	
 	if(erros.length > 0){
 		req.flash("error_msg", "Preencha todos os campos com atenção")
 		res.render('/', {erros:erros})
 	}
-
 	else {
 		Filme.create({ 
 			nome: req.body.titulo,
-			data: req.body.since,
+			data: pformat,
 			tipo: tmpTipo,
 			categoria: req.body.categ,
 			nota: req.body.nota,
@@ -286,9 +319,15 @@ router.post('/createacc', (req, res) => {
 })
 
 router.post('/commits/:id', checkAuthentication, (req, res) => {
-	console.log(req.user);
 	var idfilm = req.params.id;
+	let aux = 1;
 	var erros_commit = [];
+	if(req.body.rate1) aux = req.body.rate1
+	else if(req.body.rate2) aux = req.body.rate2
+	else if(req.body.rate3) aux = req.body.rate3
+	else if(req.body.rate4) aux = req.body.rate4
+	else if(req.body.rate5) aux = req.body.rate5
+
 	if(!req.body.starcommit || req.body.starcommit == undefined || req.body.starcommit == null)
 		erros_commit .push({message:"Nenhum comentario inserido"})
 	if(!req.body.starnota || req.body.starnota == undefined || req.body.starnota == null)
@@ -303,7 +342,7 @@ router.post('/commits/:id', checkAuthentication, (req, res) => {
 			nomeUser:req.user.user,
 			idUser: req.user.id,
 			imgUser: req.user.imgPerfil,
-			nota: req.body.starnota,
+			nota: aux,
 			comentario: req.body.starcommit,
 			idFilm: idfilm
 		}).then(() => {
@@ -315,8 +354,8 @@ router.post('/commits/:id', checkAuthentication, (req, res) => {
 			console.log(err)
 		})
 	}
-	
 })
+
 router.put('/putprofile/:id', uploads.single('imgperfil'), (req, res) => {
 	var newnome, newmail, newuser, newimg;
 	if(!req.body.nomeatl || req.body.nomeatl == undefined)
@@ -346,8 +385,7 @@ router.put('/putprofile/:id', uploads.single('imgperfil'), (req, res) => {
 			res.redirect('/profile')
 		}).catch((err) => {
 			req.flash("error_msg", "Algo deu errado, tente novamente")
-			res.redirect('/profile')
-			
+			res.redirect('/profile')			
 	})
 })
 
@@ -361,4 +399,23 @@ router.delete('/deletecommit/:id', checkAuthentication, (req, res) => {
 	})
 })
 
+router.delete('/deleteacc/:id', checkAuthentication, (req, res) => {
+	Avaliacao.destroy({where: {'idUser': req.params.id}}).then(() => {
+		}).catch((err) => {
+			req.flash("error_msg", "Upss, ocorreu um erro")
+			res.redirect('/login')
+		})
+
+	router.get('/deleteuser', (req, res) =>{
+
+	})
+})
+
 module.exports = router;
+
+/*
+
+
+
+
+*/

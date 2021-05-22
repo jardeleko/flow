@@ -11,28 +11,28 @@
                 <div class="panel-body">
                     <div class="form-group">
                         <div class="form-group row">   
-                            <label for="nomeatl" class="col-sm-2 col-form-label"> Nome Completo: </label>                 
+                            <label for="nomeatl" class="col-sm-5 col-form-label"> Nome Completo: </label>                 
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="nomeatl" name="nomeatl" size="40" placeholder="<%=dados.nome%>">
                             </div>
                         </div>
         
                         <div class="form-group row">   
-                            <label for="emailuser" class="col-sm-2 col-form-label">Email: </label>                 
+                            <label for="emailuser" class="col-sm-5 col-form-label">Email: </label>                 
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="emailatl" name="emailatl" size="40" placeholder="<%=dados.email%>">
                             </div>
                         </div>
         
                         <div class="form-group row">   
-                            <label for="usernameatl" class="col-sm-2 col-form-label">Username: </label>                 
+                            <label for="usernameatl" class="col-sm-5 col-form-label">Username: </label>                 
                             <div class="col-sm-4">
                                 <input type="text" class="form-control" id="usernameatl" name="usernameatl" size="40" placeholder="<%=dados.user%>">
                             </div>
                         </div>
         
                         <div class="form-group row">
-                            <label for="atlimg" class="col-sm-2 col-form-label">Imagem de perfil: </label>                 
+                            <label for="atlimg" class="col-sm-5 col-form-label">Imagem de perfil: </label>                 
                             <div class="custom-file col-sm-4">
                                 <input type="file" class="custom-file-input" name="imgperfil" id="img" lang="pt-br">
                                 <label class="custom-file-label" for="imgperfil">Envie uma nova imagem</label>        
@@ -48,7 +48,11 @@
             </fieldset>
         </form>
         </div>
+        <form action="<%=`/deleteacc/${dados.id}/?_method=DELETE`%>" method="POST">
+            <button type="submit" class="btn btn-outline-danger">Limpar atividades</button>
+        </form>
     </div>		
+
 </section>
 <%-include('footer')%>
 </div>

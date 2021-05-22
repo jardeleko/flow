@@ -1,22 +1,22 @@
 
 
 <%- include('header') %>
-
 <style>
-  .form-select{
-    color:black;
-  }  
+  fieldset {
+  border: 87px solid#630080;
+  padding: 0px;
+  background-color: rgb(53, 53, 53);
+  border-style:ridge;
+  border-radius: 20px;
+  color: #eee;
+  /* controla a distancia entre os elementos e a borda */
+  margin: 15px;
+  width: 100%;
+  /* margem para alinhar o fieldset com o restante do grid */
+}
 
-  .cssrat{
-      color:rgb(197, 194, 20);
-  }
-  .btn{
-      color:cornsilk;
-  }
-    
 </style>
-
-<div class="container pt-3 bg-dark text-white" style="border-radius: 0;">
+<fieldset>     
     <div class="row main">
     <% for(const fands of filmeseries) {%> 
         <div class="col-lg-6 col-12 my-5 rcol">
@@ -26,56 +26,86 @@
             </div>
             <p class="text-center my-3">O lançamento deste titúlo foi na data de <%=fands.data%> <br>
         </div>
-        <div class="col-lg-6 col-12 my-5 scol">
+        <div class="col-lg-6 col-10 my-5 scol">
          <br><br>
-            <div class="row r3">
-                <h4 class="h4" >Categoria: <%=fands.categoria%></h4>
+            <div class="row r3 ml-5">
+                <h4 class="h4" >Categoria: <%if(fands.categoria == 'Animacao'){%> Animação Infantil <%}%></h4>
             </div>
-            <div class="row r4">
+            <div class="row r3 ml-5">
                 <h5 class="payment-method">Nota de avalição:                       
                     <span class="ratings">
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <i class="fa fa-star"></i>
-                    <%= fands.nota %>
+                        <span class="ratings">
+                            <%if(fands.nota <= 1) { %>
+                                <i class="fa fa-star"></i>
+                            
+                            <%}else if(fands.nota <= 2) { %>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            
+                            <%}else if(fands.nota <= 3) { %>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                             
+                            <%}else if(fands.nota <= 4) { %>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                             
+                            <%}else if(fands.nota <= 5) { %>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                                <i class="fa fa-star"></i>
+                            <% } %> 
+                            <%= fands.nota %>
+                        </span>
                 </span></h5>
             </div>
-            <div class="row r5">
-                <h5 class='h5' >Quantidade de comentários: 172</h5   >
+             <div class="row r3 ml-5">
+                <h6>Quantidade de comentários: 172</h6>
             </div>
             <br><br><br>
             <form action=<%=`/commits/${fands.id}`%> method="POST">
-                <div class="row  r4">
-                    <h4 class="h4"> Sua avaliação: </h4>
-                    <select class="form-select" style="margin-left:4px ; text-align: center; border-radius: 20px;" name="starnota" > size="3" aria-label="size 3 select example">
-                        <option selected>Dê sua nota</option>
-                        <option value="1" class="cssrat">✭</option>
-                        <option value="2" class="cssrat">✭✭</option>
-                        <option value="3" class="cssrat">✭✭✭</option>
-                        <option value="2" class="cssrat">✭✭✭✭</option>
-                        <option value="3" class="cssrat">✭✭✭✭✭</option>
-                      </select>
-                </div>
-                <div class=" col-md-8 mb-3">
-                    <br><br>
-                    <div class="input-group ">
-                        <input type="text" class="form-control" name="starcommit" placeholder="Deixe seu comentário aqui..."> 
-                        <div class="col-md-6 col-12">
-                            <button class="btn glyphicon glyphicon-send "> 
-                                Enviar 
-                            </button>
-                        </div>
+                <div class="container_rate row r3 ml-5">
+                    <div class="post">
+                       <div class="text">
+                          Obrigado por avaliar!
+                       </div>
+                       <div class="edit">
+                          Editar
+                       </div>
+                    </div>
+                    <div class="star-widget">
+                        <input type="radio" name="rate5" value='5' id="rate-5">
+                        <label for="rate-5" class="fas fa-star"></label>
+                        <input type="radio" name="rate4" value='4' id="rate-4">
+                        <label for="rate-4" class="fas fa-star"></label>
+                        <input type="radio" name="rate3" value='3' id="rate-3">
+                        <label for="rate-3" class="fas fa-star"></label>
+                        <input type="radio" name="rate2" value='2' id="rate-2">
+                        <label for="rate-2" class="fas fa-star"></label>
+                        <input type="radio" name="rate1" value='1' id="rate-1">
+                        <label for="rate-1" class="fas fa-star"></label>
+                    </div>
+                    <div class="textarea">
+                        <textarea cols="30" name="starcommit" placeholder="Descreva sua experiência..">
+                        </textarea>
+                        <br />
+                    </div>
+
+                    <div class="btn_rate">
+                       <button type="submit">Enviar</button>
                     </div>
                 </div>
             </form>
-
+            <% } %>   
             </div>
         </div>
     </div>
-    <% } %>
-</div>
+ </fieldset>            
 
 <div class="container pt-3 bg-dark text-white" style="border-radius: 0;">
     <div class="card text" style="color: rgb(41, 42, 43); border-radius: 10px;">
@@ -90,8 +120,7 @@
                     </span>
                     <strong><%=avl.nomeUser%></strong>
                 </p>
-                <p class="card-text"><%=avl.comentario%></p> 
-                <span class="glyphicon glyphicon-thumbs-up" style="color: rgb(83, 167, 0);">curtir </span> _ <span class="glyphicon glyphicon-thumbs-down" style="color: brown;">descurtir</span>
+                <p class="card-text"><%=avl.comentario%>  <%=avl.nota%></p> 
                 <%if(user.idAdmin || user.id == avl.idUser) {%>
                     <form action="<%=`/deletecommit/${avl.id}/?_method=DELETE`%>" method="POST">                              
                         <button class="btn glyphicon glyphicon-trash " type="submit" style="color: rgb(51, 105, 253);">apagar</button>
@@ -105,4 +134,20 @@
     </div>
 
 </div>
+
+<script>
+const btn = document.querySelector("button");
+const post = document.querySelector(".post");
+const widget = document.querySelector(".star-widget");
+const editBtn = document.querySelector(".edit");
+btn.onclick = ()=>{
+    widget.style.display = "none";
+    post.style.display = "block";
+    editBtn.onclick = ()=>{
+        widget.style.display = "block";
+        post.style.display = "none";
+    }
+    return false;
+}
+ </script>
 <%-include('footer')%>

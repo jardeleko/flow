@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/jardeleko/flow#readme",
   "dependencies": {
+    "average-rating": "^1.2.1",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "connect-flash": "^0.1.1",
@@ -31,6 +32,7 @@
     "mysql2": "^2.2.5",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
+    "rateyo": "^3.0.0-alpha.2",
     "sequelize": "^6.6.2"
   },
   "devDependencies": {
