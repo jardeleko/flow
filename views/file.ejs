@@ -29,7 +29,18 @@
         <div class="col-lg-6 col-10 my-5 scol">
          <br><br>
             <div class="row r3 ml-5">
-                <h4 class="h4" >Categoria: <%if(fands.categoria == 'Animacao'){%> Animação Infantil <%}%></h4>
+                <h4 class="h4" >Categoria: <%if(fands.categoria == 'Animacao'){%>
+                                                Animação Infantil </h4>
+                                            <%}else if(fands.categoria == 'Ficcao'){%>
+                                                Ficção Científica </h4>
+                                            <%}else if(fands.categoria == 'Comedia'){%>
+                                                Comédia  </h4>
+                                            <%}else if(fands.categoria == 'Aventura'){%>
+                                                Aventura & Ação  </h4>
+                                            <%}else {%>
+                                                <%=fands.categoria%>  
+                                            <%}%></h4>
+
             </div>
             <div class="row r3 ml-5">
                 <h5 class="payment-method">Nota de avalição:                       
@@ -65,7 +76,7 @@
                 </span></h5>
             </div>
              <div class="row r3 ml-5">
-                <h6>Quantidade de comentários: 172</h6>
+                <h6>Quantidade de comentários: <%=fands.idCommmit%></h6>
             </div>
             <br><br><br>
             <form action=<%=`/commits/${fands.id}`%> method="POST">
@@ -120,13 +131,13 @@
                     </span>
                     <strong><%=avl.nomeUser%></strong>
                 </p>
-                <p class="card-text"><%=avl.comentario%>  <%=avl.nota%></p> 
+                <p class="card-text"><%=avl.comentario%>  <!--%=avl.nota%--></p> 
                 <%if(user.idAdmin || user.id == avl.idUser) {%>
                     <form action="<%=`/deletecommit/${avl.id}/?_method=DELETE`%>" method="POST">                              
                         <button class="btn glyphicon glyphicon-trash " type="submit" style="color: rgb(51, 105, 253);">apagar</button>
                     </form>
                 <% } %>    
-                <p class="text-muted"> enviado em <%=avl.createdAt%></p>  
+                <p class="text-muted" style="font-size: 10px;"> enviado em <%=avl.createdAt%></p>  
                 <div class="card-footer"></div>           
             </div>         
             <% } %>

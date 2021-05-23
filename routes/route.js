@@ -162,10 +162,26 @@ router.get('/series',checkAuthentication, (req, res) =>{
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 })
+router.get('/logs', checkAuthentication, (req, res) => {
+	var comp = req.user.id;
+	Avaliacao.findAll({where: {'idUser': comp}}).then((result) => {
+		res.render('logs', {result: result})
+	}).catch((err) => {
+		console.log(err)
+	})
+	
+/*	Filme.findAll({where: {'idUser': comp}}).then((filmeseries) => {
+		res.render('showdata', {filmeseries, filmeseries})			
+	}).catch((err) => {
+		console.log(err)
+	})
+*/
+})
 
 router.get('/filefilter/:id',checkAuthentication, (req, res) => {
 	var idteste = req.params.id
 	var user = req.user
+	let len = 0;
 	let a = 0;
 	let b = 0;
 	let c = 0;
@@ -178,13 +194,14 @@ router.get('/filefilter/:id',checkAuthentication, (req, res) => {
 			else if(result[index].nota === 3) c++;
 			else if(result[index].nota === 4) d++;
 			else if(result[index].nota === 5) e++;
-			console.log(result[index].nota)
+			len++;
 		}
 		const rating = [a, b, c, d, e];
 		var total = average(rating); // --> 4.4
-		console.log('tratou os dados sem problema' + '\n1:'+ a + '\n2:'+ b +'\n3:'+ c + '\n4:'+d + '\n5:'+e+ '\ntotal:'+total)	
 		Filme.update({
-			nota: total},
+			nota: total,
+			idCommmit: len
+			},
 			{where: {'id': idteste}}).then(() => {
 				console.log('que bom que atualizou esta tarefa')
 			}).catch((err) => {
@@ -195,8 +212,6 @@ router.get('/filefilter/:id',checkAuthentication, (req, res) => {
 		console.log('problema no countners and conutners')
 	})
 
-/*findAndCountAll
-*/
 	Avaliacao.findAll({where: {'idFilm': idteste}}).then((avaliacao) => {
 		Filme.findAll({where: {'id': idteste}}).then((filmeseries) => {			
 			res.render('file', {filmeseries: filmeseries, avaliacao: avaliacao, user:user})	
@@ -327,7 +342,7 @@ router.post('/commits/:id', checkAuthentication, (req, res) => {
 	else if(req.body.rate3) aux = req.body.rate3
 	else if(req.body.rate4) aux = req.body.rate4
 	else if(req.body.rate5) aux = req.body.rate5
-
+	Filme.update({idUser: req.user.id}, {where:{'id': idfilm}});
 	if(!req.body.starcommit || req.body.starcommit == undefined || req.body.starcommit == null)
 		erros_commit .push({message:"Nenhum comentario inserido"})
 	if(!req.body.starnota || req.body.starnota == undefined || req.body.starnota == null)
@@ -400,22 +415,24 @@ router.delete('/deletecommit/:id', checkAuthentication, (req, res) => {
 })
 
 router.delete('/deleteacc/:id', checkAuthentication, (req, res) => {
+	var buffer = []
 	Avaliacao.destroy({where: {'idUser': req.params.id}}).then(() => {
-		}).catch((err) => {
+		Filme.update({idUser: 0}, {where:{'idUser': req.user.id}});
+		res.redirect('/logs')	
+	}).catch((err) => {
 			req.flash("error_msg", "Upss, ocorreu um erro")
 			res.redirect('/login')
 		})
-
-	router.get('/deleteuser', (req, res) =>{
-
-	})
+			
+	
 })
-
 module.exports = router;
 
 /*
 
+router.get('/deleteuser', (req, res) =>{
 
+	})
 
 
 */

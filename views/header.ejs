@@ -21,7 +21,7 @@ a:visited {
 
 /* mouse over link */
 a:hover {
-    color: rgb(255, 255, 255);
+    color: rgb(3, 3, 3);
 }
 
 /* selected link */
@@ -74,14 +74,16 @@ a:active {
 
           <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/profile">
-                  <div class="fa-icon"> 
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
                     <%if(locals.users){%>
-                    <img src=<%=`/uploads/${locals.users.imgPerfil}`%> width="30" height="30" alt="perfil" style="border-radius: 100px"> Perfil
-                      <%}%>
-                  </div>            
+                      <img src=<%=`/uploads/${locals.users.imgPerfil}`%> width="30" height="30" alt="perfil" style="border-radius: 100px"> 
+                    <%}%>
                 </a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="/profile"> Perfil</a>
+                  <a class="dropdown-item" href="/logs"> Atividades</a>
+                </div>
               </li>
             </ul>
             <ul class="navbar-nav ml-auto">

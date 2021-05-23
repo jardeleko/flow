@@ -42,16 +42,24 @@ const Filme = con.sequelize.define('filmeseries', {
     },
     nota: {
         type: con.Sequelize.DOUBLE
+    },
+    idUser:{
+        type: con.Sequelize.INTEGER
+    },
+    idCommmit: {
+        type: con.Sequelize.INTEGER
     }
-
 })
 module.exports = Filme;
 //Filme.sync({force:true})
 /*
 ,
-    idCommmit: {
+,
+    total: {
         type: con.Sequelize.INTEGER
     }
+
+   
 idCommit:{
     type: con.Sequelize.INTEGER
 }
