@@ -169,13 +169,6 @@ router.get('/logs', checkAuthentication, (req, res) => {
 	}).catch((err) => {
 		console.log(err)
 	})
-	
-/*	Filme.findAll({where: {'idUser': comp}}).then((filmeseries) => {
-		res.render('showdata', {filmeseries, filmeseries})			
-	}).catch((err) => {
-		console.log(err)
-	})
-*/
 })
 
 router.get('/filefilter/:id',checkAuthentication, (req, res) => {
@@ -369,6 +362,25 @@ router.post('/commits/:id', checkAuthentication, (req, res) => {
 			console.log(err)
 		})
 	}
+})
+
+
+router.post('/search', checkAuthentication, (req, res) => {
+	var compare = req.body.search;
+	var filmeseries = []
+	console.log(compare)
+	Filme.findAll().then((result) => {
+		for (let i = 0; i < result.length; i++) {
+			if(result[i].nome.toLowerCase() == compare.toLowerCase())
+				filmeseries.push(result[i])
+			else console.log('nenhum filme encontrado')
+		}
+		res.render('showdata', {filmeseries: filmeseries})
+	}).catch((err) => {
+		req.flash("error_msg", "nenhum filme encontrado com este titulo")
+		filmeseries = result
+		res.render('showdata', {filmeseries: filmeseries})
+	})
 })
 
 router.put('/putprofile/:id', uploads.single('imgperfil'), (req, res) => {

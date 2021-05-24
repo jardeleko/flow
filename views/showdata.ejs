@@ -1,7 +1,11 @@
 
 <%-include('header')%>
-
-<br><br>
+<div class="container ">
+<form class="form-inline" action="/search" method="POST">
+    <input class="form-control col-sm-11 mr-sm-9" type="text" placeholder="Encontre aqui..." aria-label="Search" name="search" style="background-color: transparent; color: white;">
+    <button class="btn btn-outline my-2 my-sm-0" style="background-color: blueviolet; color:white; padding-left: 10;" type="submit">Buscar</button>
+  </form>
+</div>
   
 <section class="container mt-5 container-fluid">
     <form action="/list" method="GET">
