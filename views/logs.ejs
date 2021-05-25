@@ -2,7 +2,7 @@
 <table class="table table-dark">
     <thead>
         <tr>
-            <th scope="col">id</th>
+            <th scope="col">Código</th>
             <th scope="col">Comentário</th>
             <th scope="col">Nota</th>
             <th scope="col">Data</th>
@@ -10,13 +10,13 @@
     </thead>
     <tbody>
     <% for(const logs of result) {%> 
-        <tr>
-            <th scope="row"><%=logs.id%></th>
-            <td><%=logs.comentario%></td>
-            <td><%=logs.nota%></td>
-            <td><%=logs.createdAt%></td>
-        </tr>
-    <%}%>
-    </tbody>
-  </table>
+    <tr>
+        <th scope="row"><%=logs.idFilm%></th>
+        <td><%=logs.comentario%></td>
+        <td><%=logs.nota%></td>
+        <td><%=logs.createdAt%></td>
+    </tr>
+<%}%>
+</tbody>
+</table>
 <%-include('footer')%>

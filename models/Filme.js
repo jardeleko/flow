@@ -13,7 +13,7 @@ const Filme = con.sequelize.define('filmeseries', {
         allowNull: false		
 	},
     data: {
-        type: con.Sequelize.STRING,
+        type: con.Sequelize.INTEGER,
         allowNull: false		
     },
     tipo:{
@@ -52,23 +52,3 @@ const Filme = con.sequelize.define('filmeseries', {
 })
 module.exports = Filme;
 //Filme.sync({force:true})
-/*
-,
-,
-    total: {
-        type: con.Sequelize.INTEGER
-    }
-
-   
-idCommit:{
-    type: con.Sequelize.INTEGER
-}
-idplatform: {
-        type: con.Sequelize.INTEGER,
-        autoIncrement:true,
-        allowNull: false,
-        references:{
-            model: 'plataformas',
-            key: 'id'
-        } 
-*/

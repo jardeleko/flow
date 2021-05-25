@@ -49,6 +49,7 @@ function checkAuthentication(req,res,next){
 
 router.get('/', checkAuthentication, (req, res) => {
 	var admin = req.user.idAdmin;
+
 	if(admin == 1){
 		res.render('index')
 	}
@@ -128,6 +129,12 @@ router.get('/aventura',checkAuthentication, (req, res) => {
 })
 router.get('/ficcao',checkAuthentication, (req, res) => {
 	Filme.findAll({where:{'categoria':'Ficcao'},order:[['nota', 'DESC']]}).then((filmeseries) => {
+		res.render('showdata', {filmeseries: filmeseries})
+	})
+
+})
+router.get('/datas',checkAuthentication, (req, res) => {
+	Filme.findAll({order:[['data', 'ASC']]}).then((filmeseries) => {
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 
@@ -226,6 +233,9 @@ router.post('/confirm_auth', (req, res, next) => {
 
 router.post('/addfilm', uploads.single('send_img'), (req, res) => {
 	var sinc = req.body.since;
+	var nota = req.body.nota;
+	if(nota === '' || nota === undefined || nota === 0) 
+		nota = 0;
 	var splita = String(sinc).split("-");
 	let ano = splita[0]
 	let mes = splita[1]
@@ -263,15 +273,15 @@ router.post('/addfilm', uploads.single('send_img'), (req, res) => {
 		erros.push({message:"Quase lá, faltou anexar uma imagem"})
 	if(erros.length > 0){
 		req.flash("error_msg", "Preencha todos os campos com atenção")
-		res.render('/', {erros:erros})
+		res.redirect('/')
 	}
 	else {
 		Filme.create({ 
 			nome: req.body.titulo,
-			data: pformat,
+			data: ano,
 			tipo: tmpTipo,
 			categoria: req.body.categ,
-			nota: req.body.nota,
+			nota: nota,
 			faixaetaria: req.body.faixaet,
 			netflix: netflix,
 			prime: aprime,
@@ -283,7 +293,9 @@ router.post('/addfilm', uploads.single('send_img'), (req, res) => {
 			res.redirect('/')
 		}).catch((err) => {
 			req.flash("error_msg", "Erro ao enviar os dados!")
-			res.redirect('/')
+			console.log(err)
+			res.redirect('/');
+
 		})	
 	}
 })
@@ -335,6 +347,10 @@ router.post('/commits/:id', checkAuthentication, (req, res) => {
 	else if(req.body.rate3) aux = req.body.rate3
 	else if(req.body.rate4) aux = req.body.rate4
 	else if(req.body.rate5) aux = req.body.rate5
+	else aux = 0
+
+
+	
 	Filme.update({idUser: req.user.id}, {where:{'id': idfilm}});
 	if(!req.body.starcommit || req.body.starcommit == undefined || req.body.starcommit == null)
 		erros_commit .push({message:"Nenhum comentario inserido"})
@@ -368,19 +384,32 @@ router.post('/commits/:id', checkAuthentication, (req, res) => {
 router.post('/search', checkAuthentication, (req, res) => {
 	var compare = req.body.search;
 	var filmeseries = []
-	console.log(compare)
-	Filme.findAll().then((result) => {
-		for (let i = 0; i < result.length; i++) {
-			if(result[i].nome.toLowerCase() == compare.toLowerCase())
-				filmeseries.push(result[i])
-			else console.log('nenhum filme encontrado')
-		}
-		res.render('showdata', {filmeseries: filmeseries})
-	}).catch((err) => {
-		req.flash("error_msg", "nenhum filme encontrado com este titulo")
-		filmeseries = result
-		res.render('showdata', {filmeseries: filmeseries})
-	})
+	if(isNaN(compare)){
+		Filme.findAll().then((result) => {
+			for (let i = 0; i < result.length; i++) {
+				if(result[i].nome.toLowerCase() == compare.toLowerCase())
+					filmeseries.push(result[i])
+				else console.log('nenhum filme encontrado')
+			}
+			res.render('showdata', {filmeseries: filmeseries})
+		}).catch((err) => {
+			req.flash("error_msg", "nenhum filme encontrado com este titulo")
+			filmeseries = result
+			res.render('showdata', {filmeseries: filmeseries})
+		})
+	}
+	else {
+		var cast = parseInt(compare);
+		Filme.findAll({where: {'id': cast}}).then((result) => {
+			filmeseries = result;
+			res.render('showdata', {filmeseries: filmeseries})
+		}).catch((err) => {
+			req.flash("error_msg", "nenhum filme encontrado com este titulo")
+			filmeseries = result;
+			res.render('showdata', {filmeseries: filmeseries})
+		})
+	}
+
 })
 
 router.put('/putprofile/:id', uploads.single('imgperfil'), (req, res) => {
@@ -427,7 +456,6 @@ router.delete('/deletecommit/:id', checkAuthentication, (req, res) => {
 })
 
 router.delete('/deleteacc/:id', checkAuthentication, (req, res) => {
-	var buffer = []
 	Avaliacao.destroy({where: {'idUser': req.params.id}}).then(() => {
 		Filme.update({idUser: 0}, {where:{'idUser': req.user.id}});
 		res.redirect('/logs')	
@@ -439,12 +467,3 @@ router.delete('/deleteacc/:id', checkAuthentication, (req, res) => {
 	
 })
 module.exports = router;
-
-/*
-
-router.get('/deleteuser', (req, res) =>{
-
-	})
-
-
-*/

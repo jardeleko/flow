@@ -30,10 +30,5 @@ const Users = con.sequelize.define('users', {
     }
 })
 
-
 module.exports = Users;
 //Users.sync({force:true}) 
-/*fotoprofile{
-    type: con.Sequelize.STRING
-}
-*/

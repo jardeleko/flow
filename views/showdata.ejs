@@ -2,7 +2,7 @@
 <%-include('header')%>
 <div class="container ">
 <form class="form-inline" action="/search" method="POST">
-    <input class="form-control col-sm-11 mr-sm-9" type="text" placeholder="Encontre aqui..." aria-label="Search" name="search" style="background-color: transparent; color: white;">
+    <input class="form-control col-sm-11 mr-sm-9" type="text" placeholder="Encontre aqui através do código ou nome..." aria-label="Search" name="search" style="background-color: transparent; color: white;">
     <button class="btn btn-outline my-2 my-sm-0" style="background-color: blueviolet; color:white; padding-left: 10;" type="submit">Buscar</button>
   </form>
 </div>
@@ -51,8 +51,8 @@
                             </span>
                         </div>
                     </div>
-                    <h6>Comentários </h6>
-                    <div class="d-flex justify-content-between install mt-3"><span><%=fands.idCommmit%></span><span class="text-primary" ><a href=<%=`/filefilter/${fands.id}`%>> Views </a><i class="fa fa-angle-right"></i></span></div>
+                    <h6>Código: <%=fands.id%> </h6>
+                    <div class="d-flex justify-content-between install mt-3"><span>Comentários: <%=fands.idCommmit%></span><span class="text-primary" ><a href=<%=`/filefilter/${fands.id}`%>> Views </a><i class="fa fa-angle-right"></i></span></div>
                 </div>
             </div>
             <% } %>
