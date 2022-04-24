@@ -2,8 +2,9 @@
 
 # Flow films
 
-## Projeto desenvolvido para disciplina de Planejamento e Gestão de Projetos da UFFS 
-## Visa criar um catálogo de filmes e séries das plataformas de streams mais adotadas pelos brasileiros
+## Projeto desenvolvido para disciplina de PGP, Ciência da Computação - UFFS 
 
-*Idealizado por Jardel O. Duarte*
-                        
+Visa criar um catálogo de filmes e séries das plataformas de streams mais adotadas atualmente.
+
+*Idealizado por Jardel O. Duarte*    
+Ministrado por prof(a). dr(a). Raquel Pegoraro.
