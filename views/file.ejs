@@ -1,22 +1,7 @@
 
-
 <%- include('header') %>
-<style>
-  fieldset {
-  border: 87px solid#630080;
-  padding: 0px;
-  background-color: rgb(53, 53, 53);
-  border-style:ridge;
-  border-radius: 20px;
-  color: #eee;
-  /* controla a distancia entre os elementos e a borda */
-  margin: 15px;
-  width: 100%;
-  /* margem para alinhar o fieldset com o restante do grid */
-}
 
-</style>
-<fieldset>     
+<div class="container pt-2 text-white" style="border-radius: 10px 10px 0px 0px; background-color: rgb(98, 8, 120);">
     <div class="row main">
     <% for(const fands of filmeseries) {%> 
         <div class="col-lg-6 col-12 my-5 rcol">
@@ -89,6 +74,7 @@
                           Editar
                        </div>
                     </div>
+                    
                     <div class="star-widget">
                         <input type="radio" name="rate5" value='5' id="rate-5">
                         <label for="rate-5" class="fas fa-star"></label>
@@ -117,9 +103,8 @@
             </div>
         </div>
     </div>
- </fieldset>            
-
-<div class="container pt-3 bg-dark text-white" style="border-radius: 0;">
+</div>
+<div class="container pt-3 text-white" style="border-radius: 0px 0px 10px 10px; background-color: rgb(98, 8, 120);">
     <div class="card text" style="color: rgb(41, 42, 43); border-radius: 10px;">
         <div class="card-header">
         Comentários

@@ -141,19 +141,19 @@ router.get('/datas',checkAuthentication, (req, res) => {
 })
 
 router.get('/netflix',checkAuthentication, (req, res) =>{
-	Filme.findAll({where:{'netflix':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+	Filme.findAll({where:{'netflix':true}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 })
 
 router.get('/primevideos',checkAuthentication, (req, res) =>{
-	Filme.findAll({where:{'prime':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+	Filme.findAll({where:{'prime':true}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 })
 
 router.get('/gplay',checkAuthentication, (req, res) =>{
-	Filme.findAll({where:{'globo':1}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
+	Filme.findAll({where:{'globo':true}, order:[['nota', 'DESC']]}).then((filmeseries) =>{
 		res.render('showdata', {filmeseries: filmeseries})
 	})
 })
@@ -187,6 +187,8 @@ router.get('/filefilter/:id',checkAuthentication, (req, res) => {
 	let c = 0;
 	let d = 0;
 	let e = 0;
+
+	//#DEBBUG
 	Avaliacao.findAll({where: {'idFilm': idteste}}).then((result) => {
 		for (let index = 0; index < result.length; index++) {
 			if(result[index].nota === 1) a++;
@@ -325,7 +327,7 @@ router.post('/createacc', (req, res) => {
 			email: req.body.email,
 			user: req.body.username,
 			passw: password,
-			iAdmin: 0,
+			idAdmin: 1,
 			imgPerfil: 'default.png'
 		}).then(()=>{
 			req.flash("success_msg", "Bem vindo! agora é só você logar")
@@ -371,10 +373,10 @@ router.post('/commits/:id', checkAuthentication, (req, res) => {
 			idFilm: idfilm
 		}).then(() => {
 			req.flash("success_msg", "Comentário enviado com sucesso!")
-			res.redirect('/showdata')
+			res.redirect('/filefilter/'+idfilm)
 		}).catch((err) => {
 			req.flash("error_msg", "Erro ao comentar, verifique se todos os campos foram preenchidos e tente novamente!")
-			res.redirect('/showdata')
+			res.redirect('/filefilter/'+idfilm)
 			console.log(err)
 		})
 	}
@@ -446,7 +448,8 @@ router.put('/putprofile/:id', uploads.single('imgperfil'), (req, res) => {
 })
 
 router.delete('/deletecommit/:id', checkAuthentication, (req, res) => {
-	Avaliacao.destroy({where: {'id': req.params.id}}).then(() => {
+	var idfilm = req.params.id;
+	Avaliacao.destroy({where: {'id': idfilm}}).then(() => {
 		req.flash("success_msg", "Comentário deletado com sucesso!")
 		res.redirect('/showdata')
 	}).catch((err) => {
