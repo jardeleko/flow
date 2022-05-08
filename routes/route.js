@@ -225,11 +225,13 @@ router.get('/filefilter/:id',checkAuthentication, (req, res) => {
 })
 
 router.post('/confirm_auth', (req, res, next) => {
+	res.status(200).json("logado")
 	passport.authenticate("local", {
 		successRedirect: "/",
 		failureRedirect: "/login",
 		failureFlash: true 
 	})(req, res, next)
+	res.status(200).json("logado")
 })
 
 
